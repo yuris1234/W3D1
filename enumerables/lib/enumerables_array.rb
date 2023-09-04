@@ -120,10 +120,51 @@ def factors(num)
     factors
 end
 
-def bubble_siort!(&prc)
-    unsorted = true
-    while unsorted
+class Array 
+    def bubble_sort!(&prc)
+        prc ||= Proc.new {|ele1, ele2| ele1 <=> ele2}
+        unsorted = true
+        while unsorted
+            unsorted = false 
+            i = 0
+            while i < self.length - 1
+                if prc.call(self[i], self[i+1]) == 1
+                    self[i], self[i+1] = self[i+1], self[i]
+                    unsorted = true 
+                end
+                i += 1
+            end
+        end
+        self 
+    end
+    
+    def bubble_sort(&prc)
+        new = self.map {|ele| ele }
+        new.bubble_sort!(&prc)
+    end
 end
+
+def substrings(string)
+    sub = []
+    string.split("").each_with_index do |char1, idx1|
+        sub << char1
+        string.split("").each_with_index do |char2, idx2|
+            sub << string[idx1..idx2] if idx2 > idx1
+        end
+    end
+    sub
+end
+
+def subwords(word, dictionary)
+    subs = substrings(word)
+    selected = subs.select {|sub| dictionary.include?(sub)}
+    selected.uniq
+
+end
+
+# a = "delicious"
+# p substrings(a)
+# p substrings("cats")
 
 # p [1, 2, 3, [4, [5, 6]], [[[7]], 8]].my_flatten
 
